@@ -1,0 +1,40 @@
+﻿https://www.youtube.com/watch?v=WmR9IMUD_CY&list=PL9nrS_Pwv5DT-Ya21yyTark44hNHHJZB5&index=2&t=3s
+https://github.com/fireship-io/webrtc-firebase-demo
+https://stackoverflow.com/questions/60652378/webrtc-signalling-server-in-c-sharp-dot-net
+https://www.tutorialspoint.com/webrtc/webrtc_signaling.htm
+
+WebRTC
+
+Signalling server
+database? firestore?
+ICE ?
+
+Laptop
+mobile phone
+
+1. Startwebcam and display locally.
+2. Creat e anew call with rtc
+3. Join call
+4. hang up.
+
+Web Real-Time Communication is a free, open-source project providing web browsers and mobile applications with real-time communication (RTC) via simple application programming interfaces (APIs).  
+
+WebRTC sits on top of  web sockets 
+
+Major components of WebRTC include several JavaScript APIs: 
+
+getUserMedia acquires the audio and video media (e.g., by accessing a device's camera and microphone).[20] 
+
+RTCPeerConnection enables audio and video communication between peers. It performs signal processing, codec handling, peer-to-peer communication, security, and bandwidth management.[21] 
+
+RTCDataChannel allows bidirectional communication of arbitrary data between peers. It uses the same API as WebSockets and has very low latency.[22] 
+
+The WebRTC API also includes a statistics function: 
+getStats allows the web application to retrieve a set of statistics about WebRTC sessions. These statistics data are being described in a separate W3C document.[23] 
+The WebRTC API includes no provisions for signaling, that is discovering peers to connect to and determine how to establish connections among them. Applications use Interactive Connectivity Establishment for connections and somehow manage sessions, possibly relying on any of Session Initiation Protocol, Extensible Messaging and Presence Protocol, Message Queuing Telemetry Transport, Matrix (protocol), or another protocol. Signaling may depend on one or more servers.[24][25] 
+RFC 7874 requires implementations to provide PCMA/PCMU (RFC 3551), Telephone Event as DTMF (RFC 4733), and Opus (RFC 6716) audio codecs as minimum capabilities. The PeerConnection, data channel and media capture browser APIs are detailed in the W3C. 
+W3C is developing ORTC (Object Real-Time Communications) for WebRTC.[26] 
+
+WebRTC in 100 Seconds // Build a Video Chat app from Scratch 
+https://www.youtube.com/watch?v=WmR9IMUD_CY&list=WL&index=3
+ 

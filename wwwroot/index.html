@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>WebRTC Video Conference</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+        <script src="main.js"></script>
+    </head>
+
+    <body>
+        <h1>Video Conferencing v2.0</h1>
+        <video id="localVideo" autoplay />
+        <script>
+            window.addEventListener("load", function (evt) {
+                navigator.getUserMedia({ audio: true, video: true },
+                    function (stream) {
+                        var video = document.getElementById('localVideo');
+                        video.src = window.URL.createObjectURL(stream);
+                    },
+                    function (err) {
+                        console.log("The following error occurred: " + err.name);
+                    }
+                );
+            });
+        </script>
+    </body>
+</html>
