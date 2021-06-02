@@ -1,13 +1,22 @@
-﻿https://www.youtube.com/watch?v=WmR9IMUD_CY&list=PL9nrS_Pwv5DT-Ya21yyTark44hNHHJZB5&index=2&t=3s
+﻿TODO
+--------------
+1. display list of cameras
+2. Initiaite call.
+
+https://www.codeproject.com/Articles/1073738/Building-a-Video-Chat-Web-App-with-WebRTC
+https://www.youtube.com/watch?v=WmR9IMUD_CY&list=PL9nrS_Pwv5DT-Ya21yyTark44hNHHJZB5&index=2&t=3s
 https://github.com/fireship-io/webrtc-firebase-demo
 https://stackoverflow.com/questions/60652378/webrtc-signalling-server-in-c-sharp-dot-net
 https://www.tutorialspoint.com/webrtc/webrtc_signaling.htm
+https://www.wowza.com/blog/webrtc-signaling-servers
 
 WebRTC
 
-Signalling server
-database? firestore?
-ICE ?
+WebRTCSignalling server (list of calls ? SDP (Session Description Protocol.) )
+STUN/TURN server (uses ICE protocol) (Use Google) (for NAT issues)
+--database? firestore?
+--ICE (Interactivity  connectivty establishment)
+-- STUN server? Use Google Stun server (should be configuration)
 
 Laptop
 mobile phone
@@ -23,11 +32,9 @@ WebRTC sits on top of  web sockets
 
 Major components of WebRTC include several JavaScript APIs: 
 
-getUserMedia acquires the audio and video media (e.g., by accessing a device's camera and microphone).[20] 
-
-RTCPeerConnection enables audio and video communication between peers. It performs signal processing, codec handling, peer-to-peer communication, security, and bandwidth management.[21] 
-
-RTCDataChannel allows bidirectional communication of arbitrary data between peers. It uses the same API as WebSockets and has very low latency.[22] 
+1. getUserMedia acquires the audio and video media (e.g., by accessing a device's camera and microphone).[20] 
+2. RTCPeerConnection enables audio and video communication between peers. It performs signal processing, codec handling, peer-to-peer communication, security, and bandwidth management.[21] 
+3. RTCDataChannel allows bidirectional communication of arbitrary data between peers. It uses the same API as WebSockets and has very low latency.[22] 
 
 The WebRTC API also includes a statistics function: 
 getStats allows the web application to retrieve a set of statistics about WebRTC sessions. These statistics data are being described in a separate W3C document.[23] 
@@ -38,3 +45,26 @@ W3C is developing ORTC (Object Real-Time Communications) for WebRTC.[26]
 WebRTC in 100 Seconds // Build a Video Chat app from Scratch 
 https://www.youtube.com/watch?v=WmR9IMUD_CY&list=WL&index=3
  
+STUN servers
+-----------------------
+https://gist.github.com/zziuni/3741933
+
+stun.l.google.com:19302
+stun1.l.google.com:19302
+stun2.l.google.com:19302
+stun3.l.google.com:19302
+stun4.l.google.com:19302
+stun01.sipphone.com
+stun.ekiga.net
+stun.fwdnet.net
+stun.ideasip.com
+stun.iptel.org
+stun.rixtelecom.se
+stun.schlund.de
+stunserver.org
+stun.softjoys.com
+stun.voiparound.com
+stun.voipbuster.com
+stun.voipstunt.com
+stun.voxgratia.org
+stun.xten.com

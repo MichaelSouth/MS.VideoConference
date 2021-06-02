@@ -11,19 +11,16 @@
 
     <body>
         <h1>Video Conferencing v2.0</h1>
-        <video id="localVideo" autoplay />
-        <script>
-            window.addEventListener("load", function (evt) {
-                navigator.getUserMedia({ audio: true, video: true },
-                    function (stream) {
-                        var video = document.getElementById('localVideo');
-                        video.src = window.URL.createObjectURL(stream);
-                    },
-                    function (err) {
-                        console.log("The following error occurred: " + err.name);
-                    }
-                );
-            });
-        </script>
+
+        <div id="toolbar">
+            <button onclick="StartStream()">Start Stream</button>
+            <label for="devicesCombo">Devices</label>
+            <select id="devicesCombo">
+            </select>
+            <button onclick="Call()">Call</button>
+            <button onclick="Answer()">Answer</button>
+        </div>
+
+        <video id="localVideo" autoplay width="800" height="600" controls/>
     </body>
 </html>
