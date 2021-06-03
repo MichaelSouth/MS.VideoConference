@@ -3,6 +3,7 @@
 1. display list of cameras
 2. Initiaite call.
 
+https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Signaling_and_video_calling/webrtc_-_signaling_diagram.svg
 https://www.codeproject.com/Articles/1073738/Building-a-Video-Chat-Web-App-with-WebRTC
 https://www.youtube.com/watch?v=WmR9IMUD_CY&list=PL9nrS_Pwv5DT-Ya21yyTark44hNHHJZB5&index=2&t=3s
 https://github.com/fireship-io/webrtc-firebase-demo
