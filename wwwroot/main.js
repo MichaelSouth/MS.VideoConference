@@ -69,31 +69,42 @@ async function StartStream() {
     }
 }
 
-function CreateCall() {
+async function CreateCall() {
     console.log("CreateCall clicked");
 
     if (stream) {
         var peerConnection = new RTCPeerConnection(servers);
         peerConnection.addStream(stream);
 
-        var offerDescription = peerConnection.createOffer();
+        var offerDescription = await peerConnection.createOffer();
         console.log("Offer created");
         console.log(offerDescription);
-        peerConnection.setLocalDescription(new RTCSessionDescription(offer));
-
-        // TODO send the offer to a server to be forwarded to the other peer
         const offer = {
             sdp: offerDescription.sdp,
             type: offerDescription.type,
         };
+        peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+
+        // TODO send the offer to a server to be forwarded to the other peer
+        const params = {
+            clientId: localClientId,
+            offer: offer
+        };
+
+        //const data = new URLSearchParams();
+        //data.append('clientId', localClientId );
+        //data.append('offer', offer);
 
         let response = fetch('/Signal/CreateOffer', {
             method: 'post',
             headers: {
                 "Content-type": "application/json"
             },
-            body: JSON.stringify(offer)
-        }).then(() => {
+            body: JSON.stringify(params)
+        }).then((data) => {
+            if (!data.ok) {
+                throw data;
+            }
             console.log("Offer posted ");
         })
     }

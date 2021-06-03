@@ -7,7 +7,7 @@ namespace MS.VideoConference.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SignalController : ControllerBase
+    public partial class SignalController : ControllerBase
     {
         private readonly ILogger<SignalController> _logger;
         private static readonly Dictionary<string, SDPOffer> _offers = new Dictionary<string, SDPOffer>();
@@ -25,11 +25,11 @@ namespace MS.VideoConference.Controllers
 
         [HttpPost]
         [Route("CreateOffer")]
-        public IActionResult CreateOffer(string clientId, SDPOffer offer)
+        public IActionResult CreateOffer(CreateOfferRequest request)
         {
-            _logger.LogInformation($"CreateOffer called by {clientId}{offer.Type}: {offer.SDP}");
+            _logger.LogInformation($"CreateOffer called by {request.clientId}{request.offer.Type}: {request.offer.SDP}");
 
-            _offers.Add(clientId, offer);
+            _offers.Add(request.clientId, request.offer);
 
             return Ok();
         }
