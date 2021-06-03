@@ -7,6 +7,8 @@ const servers = {
   iceCandidatePoolSize: 10,
 };
 
+let stream;
+
 console.log("Add load event callback");
 window.addEventListener("load", async function (evt) {
     console.log("Load event fired");
@@ -47,7 +49,7 @@ async function StartStream() {
 
     const deviceId = devicesCombo.options[devicesCombo.selectedIndex].value;
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { deviceId: deviceId } });
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { deviceId: deviceId } });
         /* use the stream */
         var video = document.getElementById('localVideo');
         video.srcObject = stream;
@@ -57,8 +59,28 @@ async function StartStream() {
     }
 }
 
-function Call() {
-    console.log("Call clicked");
+function CreateCall() {
+    console.log("CreateCall clicked");
+
+    if (stream) {
+        var peerConnection = new RTCPeerConnection(servers);
+        peerConnection.addStream(stream);
+
+        var offerDescription = peerConnection.createOffer();
+        console.log("Offer created");
+        console.log(offerDescription);
+        peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+
+        // TODO send the offer to a server to be forwarded to the other peer
+        const offer = {
+            sdp: offerDescription.sdp,
+            type: offerDescription.type,
+        };
+    }
+    else {
+        console.log("No stream.");
+        alert("No stream.");
+    }
 }
 
 function Answer() {
