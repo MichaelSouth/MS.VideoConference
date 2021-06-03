@@ -1,3 +1,7 @@
+let peerConnection
+let stream;
+let latestOffer;
+
 const localClientId = uuidv4();
 
 const servers = {
@@ -9,8 +13,6 @@ const servers = {
   iceCandidatePoolSize: 10,
 };
 
-let stream;
-
 Initialise();
 
 function Initialise() {
@@ -21,6 +23,15 @@ function Initialise() {
 
     window.addEventListener("load", async function (evt) {
         console.log("Load event fired");
+
+        peerConnection = new RTCPeerConnection(servers);
+        peerConnection.onicecandidate = handleICECandidateEvent;
+        peerConnection.ontrack = handleTrackEvent;
+        peerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
+        peerConnection.onremovetrack = handleRemoveTrackEvent;
+        peerConnection.oniceconnectionstatechange = handleICEConnectionStateChangeEvent;
+        peerConnection.onicegatheringstatechange = handleICEGatheringStateChangeEvent;
+        peerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
 
         if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
             console.log("enumerateDevices() not supported.");
@@ -63,6 +74,7 @@ async function StartStream() {
         /* use the stream */
         var video = document.getElementById('localVideo');
         video.srcObject = stream;
+        peerConnection.addStream(stream);
     } catch (err) {
         /* handle the error */
         console.log("The following error occurred: " + err.name);
@@ -73,8 +85,6 @@ async function CreateCall() {
     console.log("CreateCall clicked");
 
     if (stream) {
-        var peerConnection = new RTCPeerConnection(servers);
-        peerConnection.addStream(stream);
 
         var offerDescription = await peerConnection.createOffer();
         console.log("Offer created");
@@ -114,8 +124,26 @@ async function CreateCall() {
     }
 }
 
-function Answer() {
+async function Answer() {
     console.log("Answer clicked");
+
+    if (latestOffer) {
+        console.log("Answering: " + latestOffer);
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(latestOffer));
+
+        peerConnection.addStream(stream);
+
+        const answerDescription = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answerDescription);
+
+        const answer = {
+            type: answerDescription.type,
+            sdp: answerDescription.sdp,
+        };
+    } else {
+        console.log("No offer to answer.");
+        alert("No offer to answer.");
+    }
 }
 
 function GetOffers() {
@@ -133,7 +161,8 @@ function GetOffers() {
             for (let i = 0; i < data.length; i++) {
                 const offer = data[i];
 
-                console.log(offer.label);              
+                console.log(offer.label);
+                latestOffer = offer;
             }
 
             this.window.setTimeout(GetOffers, 2000);
@@ -148,4 +177,34 @@ function uuidv4() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+function handleICECandidateEvent(event) {
+    console.log("handleICECandidateEvent called: "+event);
+}
+
+function handleTrackEvent(event) {
+    console.log("handleTrackEvent called: " + event);
+
+    document.getElementById("receivedVideo").srcObject = event.streams[0];
+}
+
+function handleNegotiationNeededEvent(event) {
+    console.log("handleNegotiationNeededEvent called: " + event);
+}
+
+function handleRemoveTrackEvent(event) {
+    console.log("handleRemoveTrackEvent called: " + event);
+}
+
+function handleICEConnectionStateChangeEvent(event) {
+    console.log("handleICEConnectionStateChangeEvent called: " + event);
+}
+
+function handleICEGatheringStateChangeEvent(event) {
+    console.log("handleICEGatheringStateChangeEvent called: " + event);
+}
+
+function handleSignalingStateChangeEvent(event) {
+    console.log("handleSignalingStateChangeEvent called: " + event);
 }

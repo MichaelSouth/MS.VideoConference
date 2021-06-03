@@ -29,6 +29,8 @@ namespace MS.VideoConference.Controllers
         {
             _logger.LogInformation($"CreateOffer called by {request.clientId}{request.offer.Type}: {request.offer.SDP}");
 
+            //temp HACK only support 1 offer
+            _offers.Clear();
             _offers.Add(request.clientId, request.offer);
 
             return Ok();
