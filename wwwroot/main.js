@@ -1,6 +1,8 @@
 let peerConnection = null;
 let localStream = null;
 let remoteStream = null;
+let iceMessages = [];
+let latestAnswer = null;
 
 const localClientId = uuidv4();
 
@@ -211,29 +213,34 @@ async function GetMessages() {
                 }
                 if (message.type === "answer") {
                     console.log("Set latest answer to: ", message);
-                    let answer = JSON.parse(message.data);
-                    peerConnection.setRemoteDescription(answer).catch((error) => {
+                    latestAnswer = JSON.parse(message.data);
+                    await peerConnection.setRemoteDescription(latestAnswer).catch((error) => {
                         // Handle the error
                         console.error(error);
                     });
                 }
+
+                if (message.type === "candidate") {
+                    iceMessages.push(message);
+                }
             }
 
             //Hack add the ice candidates after
-            for (let i = 0; i < data.length; i++) {
-                const message = data[i];
-                console.log("Message Received: ", message);
+            if (latestAnswer === null) {
+                for (let i = 0; i < iceMessages.length; i++) {
+                    const candidate = iceMessages[i].data;
+                    console.log("Process candidate: ", candidate);
 
-                if (message.type === "candidate") {
-                    let candidate = message.data;
-                    console.log("addIceCandidate", candidate);
                     let temp = JSON.parse(candidate);
                     let iceCandidate = new RTCIceCandidate(temp);
-                    peerConnection.addIceCandidate(iceCandidate).catch((error) => {
+                    await peerConnection.addIceCandidate(iceCandidate).catch((error) => {
                         // Handle the error
                         console.error(error);
                     });;
                 }
+
+                //Clear queue
+                iceMessages = [];
             }
 
             this.window.setTimeout(GetMessages, 2000);
