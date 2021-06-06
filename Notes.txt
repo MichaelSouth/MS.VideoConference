@@ -1,5 +1,7 @@
 ﻿TODO
 --------------
+Receive all ice calls (add sent flag).
+
 1. display list of cameras
 2. Initiaite call.
 

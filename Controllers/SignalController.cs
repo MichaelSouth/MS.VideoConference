@@ -10,7 +10,7 @@ namespace MS.VideoConference.Controllers
     public partial class SignalController : ControllerBase
     {
         private readonly ILogger<SignalController> _logger;
-        private static readonly Dictionary<string, SDPOffer> _offers = new Dictionary<string, SDPOffer>();
+        private static readonly List<Message> _messages = new List<Message>();
 
         public SignalController(ILogger<SignalController> logger)
         {
@@ -25,27 +25,49 @@ namespace MS.VideoConference.Controllers
 
         [HttpPost]
         [Route("CreateOffer")]
-        public IActionResult CreateOffer(CreateOfferRequest request)
+        public IActionResult CreateOffer(Message message)
         {
-            _logger.LogInformation($"CreateOffer called by {request.clientId}{request.offer.Type}: {request.offer.SDP}");
+            _logger.LogInformation($"CreateOffer {message.ClientId}{message.Type}: {message.Data}");
 
-            //temp HACK only support 1 offer
-            _offers.Clear();
-            _offers.Add(request.clientId, request.offer);
+            lock (_messages)
+            {
+                _messages.Add(message);
+            }
 
             return Ok();
         }
 
-        /// <summary>
-        /// Get all Temperature Sensors
-        /// </summary>
-        [HttpGet]
-        [Route("GetOffers")]
-        public ActionResult<IEnumerable<SDPOffer>> GetOffers(string clientId)
+        [HttpPost]
+        [Route("SendCandidate")]
+        public IActionResult SendCandidate(Message message)
         {
-            _logger.LogInformation($"GetOffers called {clientId}");
+            _logger.LogInformation($"SendCandidate {message.ClientId}{message.Type}: {message.Data}");
 
-            return _offers.Where(x => x.Key != clientId).Select(x => x.Value).ToList();
+            lock (_messages)
+            {
+                _messages.Add(message);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetMessages")]
+        public ActionResult<IEnumerable<Message>> GetMessages(string clientId)
+        {
+            _logger.LogInformation($"GetMessages called {clientId}");
+
+            lock (_messages)
+            {
+                var tempMessages = _messages.Where(x => x.ClientId != clientId).ToArray();
+
+                foreach (var kvp in tempMessages)
+                {
+                    _messages.Remove(kvp);
+                }
+
+                return tempMessages;
+            }
         }
     }
 }
